@@ -1,0 +1,124 @@
+Vue CLI
+
+- Allow us to select the libraries
+- Auto plug libraries to the projects
+- It configures Webpack all JavaScript css.. bundled together
+- In development it's enable hot module replacement (Update when ever you save)
+
+============
+
+folders:
+node_modules: folder there is all libraries that we will use
+public: we put the files the we dont to be process throw wepack
+
+App.vue: root component that all other compont nasted on it
+main.js: is the file that rander our app and mount it to the dom
+
+babel.config and package.json: help to config our app and handel it's depdencies
+
+=====
+
+if we run this commend:
+npm run build
+
+it's will create to us dist folder that have index.html file that include two javaScirpt files
+first file is for all depdencise
+seconed file for all code(component)
+
+=====
+
+server-side routing
+
+client-side routing (used in vue by most of developer)
+
+the feature of this routing sometime it's not rquired to call the server to rander
+something.
+================
+
+you can check the installed depdencies in package.json
+
+================
+
+to redirect to a link we can use the following in router page:
+{
+path: '/about',
+redirect: { name: 'About' }
+}
+
+===============
+
+to remove the # from the link we can use:
+
+const router = new VueRouter({
+mode: 'history',
+routes
+})
+
+======================
+
+we use scoped in style of component so the style of the component not affect the other components
+
+========================
+
+to add gloabl style we can but the style we want int app.vue
+
+=========================
+
+to register a component 
+
+import EventCard from '@/components/EventCard.vue'
+
+export default {
+  components: {
+    EventCard
+  }
+}
+
+if we want it to be registerd gloably we can put it in app.vue
+
+==========================
+
+ // We used data object and return function so every component can have it's own data
+
+ =========================
+
+to register any component gloably we can put the following code in the main.js
+
+ import Vue from 'vue'
+import upperFirst from 'lodash/upperFirst'
+import camelCase from 'lodash/camelCase'
+
+const requireComponent = require.context(
+  // The relative path of the components folder
+  './components',
+  // Whether or not to look in subfolders
+  false,
+  // The regular expression used to match base component filenames
+  /Base[A-Z]\w+\.(vue|js)$/
+)
+
+requireComponent.keys().forEach(fileName => {
+  // Get component config
+  const componentConfig = requireComponent(fileName)
+
+  // Get PascalCase name of component
+  const componentName = upperFirst(
+    camelCase(
+      // Gets the file name regardless of folder depth
+      fileName
+        .split('/')
+        .pop()
+        .replace(/\.\w+$/, '')
+    )
+  )
+
+
+  // Register component globally
+  Vue.component(
+    componentName,
+    // Look for the component options on `.default`, which will
+    // exist if the component was exported with `export default`,
+    // otherwise fall back to module's root.
+    componentConfig.default || componentConfig
+  )
+})
